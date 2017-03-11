@@ -1,4 +1,4 @@
-module Samsum where
+module Samsum ( findBetween ) where
 
 import Data.Char
 
@@ -22,11 +22,10 @@ findSeqsBySum s xs = takeWhile sumEquals $ dropWhile sumNoGreaterThan $ subsets 
                             sumNoGreaterThan ys = sumByDigits ys < s
 
 findBetween         :: Int -> Int -> [(Int, Int)]
-findBetween min max = 
-    map firstAndLast $ concatMap findOne directions
-            where
-                directions = [  ([min .. max], 1), 
-                                (reverse [ min .. (max - 1) ], -1) ]
-                sum' = sumByDigits [ min .. max ]
-                findOne (xs, incr) = concatMap (findSeqsBySum sum') $ map (infiniteSeq incr) xs
-                firstAndLast xs = (head xs, last xs)
+findBetween min max = map firstAndLast $ concatMap findOne directions
+                        where
+                            directions = [  ([min .. max], 1), 
+                                            (reverse [ min .. (max - 1) ], -1) ]
+                            sum' = sumByDigits [ min .. max ]
+                            findOne (xs, incr) = concatMap (findSeqsBySum sum') $ map (infiniteSeq incr) xs
+                            firstAndLast xs = (head xs, last xs)

@@ -1,4 +1,4 @@
-module Lib where
+module Samsum where
 
 import Data.Char
 

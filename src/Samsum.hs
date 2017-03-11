@@ -13,9 +13,7 @@ infiniteSeq incr from = if from <= 0
                         else from : infiniteSeq incr (incr + from)
 
 subsets     :: [a] -> [[a]]
-subsets xs  = tail $ scanl fcons [] xs 
-            where 
-                fcons a b = a ++ [b]
+subsets xs  = tail $ scanl (flip (:)) [] xs 
 
 findSeqsBySum      :: Int -> [Int] -> [[Int]]
 findSeqsBySum s xs = takeWhile sumEquals $ dropWhile sumNoGreaterThan $ subsets xs

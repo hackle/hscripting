@@ -18,10 +18,10 @@ subsets xs  = tail $ scanl fcons [] xs
                 fcons a b = a ++ [b]
 
 findSeqsBySum      :: Int -> [Int] -> [[Int]]
-findSeqsBySum s xs = takeWhile sumEquals $ reverse $ takeWhile sumNoGreaterThan $ subsets xs
+findSeqsBySum s xs = takeWhile sumEquals $ dropWhile sumNoGreaterThan $ subsets xs
                         where
                             sumEquals ys = sumByDigits ys == s
-                            sumNoGreaterThan ys = sumByDigits ys <= s
+                            sumNoGreaterThan ys = sumByDigits ys < s
 
 findBetween         :: Int -> Int -> [(Int, Int)]
 findBetween min max = 

@@ -13,17 +13,23 @@ subsetsOf xs@(x:rest) =
 subsetsInLen :: [a] -> Int -> [[a]]
 subsetsInLen xs len = [ ys | ys <- subsetsOf xs, len == length ys]
 
-uniqueSums :: [[Int]] -> Set.Set Int
+type SumState = (Set.Set Int, Set.Set Int)
+
+uniqueSums :: [[Int]] -> SumState
 uniqueSums xss = 
-    foldl folder Set.empty xss
+    foldl folder (Set.empty, Set.empty) xss
     where
-        folder :: Set.Set Int -> [Int] -> Set.Set Int
-        folder set xs =
+        folder :: SumState -> [Int] -> SumState
+        folder (sums, dups) xs =
             let s = sum xs in
-            if Set.member s set
-            then Set.delete s set
-            else Set.insert s set
+            if Set.member s sums
+            then (sums, Set.insert s dups)
+            else (Set.insert s sums, dups)
 
 findUniqueSums :: Int -> [Int] -> Set.Set Int
 findUniqueSums subsetLen xs =
-    uniqueSums $ subsetsInLen xs subsetLen
+    let (sums, dups) = uniqueSums $ subsetsInLen xs subsetLen
+    in Set.difference sums dups
+
+findTotalUniqueSums :: Int -> [Int] -> Int
+findTotalUniqueSums len xs = Set.size $ findUniqueSums len xs

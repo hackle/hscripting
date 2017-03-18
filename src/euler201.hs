@@ -1,4 +1,4 @@
-module Euler201 where
+module Euler201 (findUniqueSums) where
 
 import qualified Data.Set as Set
 
@@ -20,16 +20,16 @@ uniqueSums xss =
     foldl folder (Set.empty, Set.empty) xss
     where
         folder :: SumState -> [Int] -> SumState
-        folder (sums, dups) xs =
+        folder state@(sums, dups) xs =
             let s = sum xs in
-            if Set.member s sums
-            then (sums, Set.insert s dups)
-            else (Set.insert s sums, dups)
+            if Set.member s dups
+            then state
+            else    
+                if Set.member s sums
+                then (sums, Set.insert s dups)
+                else (Set.insert s sums, dups)
 
-findUniqueSums :: Int -> [Int] -> Set.Set Int
+findUniqueSums :: Int -> [Int] -> Int
 findUniqueSums subsetLen xs =
     let (sums, dups) = uniqueSums $ subsetsInLen xs subsetLen
-    in Set.difference sums dups
-
-findTotalUniqueSums :: Int -> [Int] -> Int
-findTotalUniqueSums len xs = Set.size $ findUniqueSums len xs
+    in Set.size sums - Set.size dups

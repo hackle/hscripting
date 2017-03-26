@@ -1,17 +1,13 @@
-module Euler201 (findUniqueSums) where
+module Euler201 where
 
 import qualified Data.Set as Set
 
-subsetsOf :: [a] -> [[a]]
-subsetsOf [] = []
-subsetsOf (x:[]) = [[x]]
-subsetsOf xs@(x:rest) =
-    (:) [x] $ concat $
-        do  xs' <- subsetsOf rest
-            return [xs', x:xs']
-
-subsetsInLen :: [a] -> Int -> [[a]]
-subsetsInLen xs len = [ ys | ys <- subsetsOf xs, len == length ys]
+subsetsOf :: [a] -> Int -> [[a]] -> [[a]]
+subsetsOf [] len acc = filter (\xs -> length xs == len) acc
+subsetsOf xs@(x:rest) len acc =
+    subsetsOf rest len acc'
+    where
+        acc' = [x] : acc ++ [ x:ys | ys <- acc, length ys < len ]
 
 type SumState = (Set.Set Int, Set.Set Int)
 
@@ -31,5 +27,5 @@ uniqueSums xss =
 
 findUniqueSums :: Int -> [Int] -> Int
 findUniqueSums subsetLen xs =
-    let (sums, dups) = uniqueSums $ subsetsInLen xs subsetLen
+    let (sums, dups) = uniqueSums $ subsetsOf xs subsetLen []
     in Set.size sums - Set.size dups

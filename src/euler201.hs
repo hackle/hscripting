@@ -3,11 +3,15 @@ module Euler201 where
 import qualified Data.Set as Set
 
 subsetsOf :: [a] -> Int -> [[a]] -> [[a]]
-subsetsOf [] len acc = filter (\xs -> length xs == len) acc
+-- subsetsOf [] len acc = filter (\xs -> length xs == len) acc
+subsetsOf [] _ acc = acc
 subsetsOf xs@(x:rest) len acc =
     subsetsOf rest len acc'
     where
-        acc' = [x] : acc ++ [ x:ys | ys <- acc, length ys < len ]
+        acc' = 
+            do  xs' <- ([x] : acc ++ [ x:ys | ys <- acc, length ys < len ])
+                True <- return (length xs' >= len - length rest)
+                return xs'
 
 type SumState = (Set.Set Int, Set.Set Int)
 

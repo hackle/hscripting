@@ -1,12 +1,18 @@
 module Main where
 
 import System.Environment
-import Samsum
+import Euler201
 import Text.Printf
+import Data.Time.Clock
 
 main :: IO ()
 main = do 
-        arg1:arg2:_ <- getArgs
-        let     [min, max]  = map (\x -> read x::Int) [arg1, arg2]
-                result      = findBetween min max
-            in putStr $ printf "%d -> %d and result is %s" min max (show result)
+        startTime <- getCurrentTime
+        arg1:arg2:arg3:_ <- getArgs
+        let     [min, max, len]  = map (\x -> read x::Int) [arg1, arg2, arg3] 
+                cnt = findUniqueSums len [min..max] in
+                do finishTime <- getCurrentTime
+                        printf "Result: %d Time elapsed: %s" (show cnt) (show $ diffUTCTime startTime finishTime)
+
+                
+                

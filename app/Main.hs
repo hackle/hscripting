@@ -9,10 +9,11 @@ main :: IO ()
 main = do 
         startTime <- getCurrentTime
         arg1:arg2:arg3:_ <- getArgs
-        let     [min, max, len]  = map (\x -> read x::Int) [arg1, arg2, arg3] 
+        let     [min, max, len]  = map (\x -> read x::Int) [arg1, arg2, arg3]
                 cnt = findUniqueSums len [min..max] in
-                do finishTime <- getCurrentTime
-                        printf "Result: %d Time elapsed: %s" (show cnt) (show $ diffUTCTime startTime finishTime)
+                do      finishTime <- getCurrentTime
+                        let     msg = printf "Result: %s Time elapsed: %s" (show cnt) (show $ diffUTCTime startTime finishTime) in
+                                putStr msg
 
                 
                 
